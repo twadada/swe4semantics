@@ -17,7 +17,7 @@ def load_w2v(file):
                 dim = len(vec)
             else:
                 if len(vec) == 0:
-                    print("skip the zero vector")
+                    print("skip the empty vector")
                     continue
                 assert len(vec) == dim, str(len(vec)) + "::" + str(dim)
             word2vec[w] = np.array([float(x) for x in vec])
