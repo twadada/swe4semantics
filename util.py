@@ -40,7 +40,7 @@ def encode_text(text, word_tokenizer, model_tokenizer, punct_list, word2vec, edi
                 if len(subwords):
                     while len(subwords) > 1:
                         subwords = subwords[:-1]
-                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "")
+                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "") #remove word boudnary indicators
                         word_vec = word2vec.get(subwords_str)
                         if word_vec is None:
                             word_vec = word2vec.get(subwords_str.lower())
@@ -60,7 +60,7 @@ def encode_text(text, word_tokenizer, model_tokenizer, punct_list, word2vec, edi
 def encode_text_xling(lang, text, word_tokenizer, model_tokenizer, punct_list, word2vec, edim, normalise = True):
     assert lang in set(["en","de","ja","zh"])
     eps =  0.00000001
-    if lang =='ja' or lang == "zh": #We use subword tokenisation for ja/zh as mGTE does not pre-tokenise text into words
+    if lang =='ja' or lang == "zh": #We do not use word_tokenizer for ja/zh because these languages do not have explicit word boundary, unlike en/de
         tokens = [x.replace("▁", "")  for x in model_tokenizer(text) if x != "▁"]
     else: #word tokenisation
         tokens = [x[0] for x in word_tokenizer(text)]
@@ -77,7 +77,7 @@ def encode_text_xling(lang, text, word_tokenizer, model_tokenizer, punct_list, w
                 if len(subwords):
                     while len(subwords) > 1:
                         subwords = subwords[:-1]
-                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "")
+                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "") #remove word boudnary indicators
                         word_vec = word2vec.get(subwords_str)
                         if word_vec is None:
                             word_vec = word2vec.get(subwords_str.lower())
