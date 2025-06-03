@@ -40,7 +40,7 @@ def encode_text(text, word_tokenizer, model_tokenizer, punct_list, word2vec, edi
                 if len(subwords):
                     while len(subwords) > 1:
                         subwords = subwords[:-1]
-                        subwords_str = "".join(subwords).replace("##", "")  # .replace("▁", "")
+                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "")
                         word_vec = word2vec.get(subwords_str)
                         if word_vec is None:
                             word_vec = word2vec.get(subwords_str.lower())
@@ -54,3 +54,38 @@ def encode_text(text, word_tokenizer, model_tokenizer, punct_list, word2vec, edi
         sent_emb = np.zeros(edim)
     return sent_emb
 
+
+
+def encode_text_xling(lang, text, word_tokenizer, model_tokenizer, punct_list, word2vec, edim):
+    assert lang in set(["en","de","ja","zh"])
+    eps =  0.00000001
+    if lang =='ja' or lang == "zh": #We use subword tokenisation for ja/zh as mGTE does not pre-tokenise text into words
+        tokens = [x.replace("▁", "")  for x in model_tokenizer(text) if x != "▁"]
+    else: #word tokenisation
+        tokens = [x[0] for x in word_tokenizer(text)]
+    sent_emb = []
+    for w in tokens:
+        if w not in punct_list:
+            word_vec = word2vec.get(w)
+            if word_vec is None:
+                word_vec = word2vec.get(w.lower())
+            if word_vec is not None:
+                sent_emb.append(word_vec)
+            elif model_tokenizer is not None:
+                subwords = model_tokenizer.tokenize(w)
+                if len(subwords):
+                    while len(subwords) > 1:
+                        subwords = subwords[:-1]
+                        subwords_str = "".join(subwords).replace("##", "").replace("▁", "")
+                        word_vec = word2vec.get(subwords_str)
+                        if word_vec is None:
+                            word_vec = word2vec.get(subwords_str.lower())
+                        if word_vec is not None:
+                            sent_emb.append(word_vec)
+                            break
+    if len(sent_emb) > 0:
+        sent_emb = np.sum(sent_emb, axis=0)  # n, edim
+        sent_emb = sent_emb / (np.linalg.norm(sent_emb) + eps)
+    else:
+        sent_emb = np.zeros(edim)
+    return sent_emb
