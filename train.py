@@ -20,7 +20,6 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train sentence embeddings')
     parser.add_argument('-bs', default=128, type=int, help='Batch size')
-    parser.add_argument('-edim', type=int, required=True, help='Embedding dimension')
     parser.add_argument('-prompt', default="", type=str, help='Prompt for sentence transformer')
     parser.add_argument('-vec_path', required=True, type=str, help='Path to word vectors')
     parser.add_argument('-model', required=True, type=str, help='Sentence transformer model')
