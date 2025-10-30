@@ -99,12 +99,11 @@ def parse_args():
                        help='Output folder for PCA components')
     parser.add_argument('-word2sent', required=True,
                        help='Pickle file mapping words to example sentences')
-    parser.add_argument('-d_remove', required=True, type=int,
-                       help='Save PCA-transformed word vectors')
-    parser.add_argument('-embd', required=True, type=int,
-                       help='Save PCA-transformed word vectors')
+    parser.add_argument('-embd', required=True, type=int, help='the number of components to remove (ABTT)')
+    parser.add_argument('-d_remove', required=True, type=int, help='Embedding dimension')
 
-    return parser.parse_args()
+
+return parser.parse_args()
 
 
 def main():

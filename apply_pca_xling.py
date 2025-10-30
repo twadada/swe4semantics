@@ -147,8 +147,8 @@ def main():
     parser.add_argument('-word2sent1', required=True, help='Path to word2sent pickle for lang1')
     parser.add_argument('-word2sent2', required=True, help='Path to word2sent pickle for lang2')
     parser.add_argument('-output_folder', required=True, help='Output folder for PCA files')
-    parser.add_argument('-embd', required=True, type=int,help='Output folder for PCA files')
-    parser.add_argument('-d_remove', required=True, type=int,help='Output folder for PCA files')
+    parser.add_argument('-embd', required=True, type=int,help='the number of components to remove (ABTT)')
+    parser.add_argument('-d_remove', required=True, type=int,help='Embedding dimension')
 
     args = parser.parse_args()
     
