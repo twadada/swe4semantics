@@ -34,7 +34,7 @@ model="Alibaba-NLP/gte-base-en-v1.5"
 word2sent=path_to_word2sent.pkl
 vec_path=output_pca_folder_path/vec.txt
 output_folder=final_output_folder_path
-CUDA_VISIBLE_DEVICES=0 python train.py -prompt "" -edim 256 -d_remove 7 -word2sent ${word2sent} -epoch 15 -bs 128  -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
+CUDA_VISIBLE_DEVICES=0 python train.py -prompt "" -word2sent ${word2sent} -epoch 15 -bs 128  -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
 ```
 
 # Train Cross-lingual SWEs
