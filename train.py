@@ -211,7 +211,7 @@ def main():
     print(f"Dev samples: {len(sents_dev)}")
     
     # Initialize model
-    print(f"Initializing model with embedding dim: {args.edim}")
+    print(f"Initializing model with embedding dim: {edim}")
     model = Net(word2vec, args.model)
     model.to("cuda")
     
