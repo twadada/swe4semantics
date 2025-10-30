@@ -1,3 +1,4 @@
 *.zip filter=lfs diff=lfs merge=lfs -text
 swe_gte256_en filter=lfs diff=lfs merge=lfs -text
 swe_gte256_en.txt.zip filter=lfs diff=lfs merge=lfs -text
+/Users/takashi.wada/swe4semantics/embeddings/swe_mgte256_enja.txt.zip filter=lfs diff=lfs merge=lfs -text
