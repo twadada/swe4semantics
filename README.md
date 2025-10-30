@@ -21,10 +21,10 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 
 ## 2. Apply Sentence-level PCA
 ```
-vec_path=output_folder_path/vec.txt
-word2sent=path_to_word2sent.pkl
-output_folder=output_pca_folder_path
 model="Alibaba-NLP/gte-base-en-v1.5"
+word2sent=path_to_word2sent.pkl
+vec_path=output_folder_path/vec.txt
+output_folder=output_pca_folder_path
 python apply_pca.py -word2sent ${word2sent} -vec_path ${vec_path} -model ${model} -output_folder ${output_folder}
 ```
 
@@ -38,8 +38,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py -prompt "" -edim 256 -d_remove 7 -word2se
 ```
 
 # Train Cross-lingual SWEs
-As in obtaining monolingual SWEs above, prepare the "word2sent.pkl" file that pickles the python dictionary where keys are a list of words in a pre-defined vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we use  [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) and sample N=100 sentences for each word.
-
+As in monolingual SWEs, prepare the "word2sent.pkl" file that pickles the python dictionary where keys are a list of words in a pre-defined vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we use  [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) and sample N=100 sentences for each word.
 
 **Code is hard-coded for language pairs used in our paper (en-de, en-zh, en-ja); modify relevant parts if necessary.**
 
@@ -68,10 +67,9 @@ model="Alibaba-NLP/gte-multilingual-base"
 output_folder=output_pca_folder_path
 python multilingual_pca.py -d_remove 7 -embd 256 -lang1 ${lang1} -lang2 ${lang2} -word2sent1 ${word2sent_en} -word2sent2 ${word2sent_de}  -vec_path1 ${vec_path_en} -vec_path2 ${vec_path_de}  -model ${model}  -output_folder ${output_folder}
 ```
-(If the input language is Japanese/Chinese, use enable the "-subword" option)
 
 ## 3. Fine-tune SWEs with contrastive learning
-Prepare the **"en.txt" and "de.txt"**, where each line is a sentence and translation to each other (hence, both files should have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) again.
+Prepare the **"en.txt" and "de.txt"**, where each line is a sentence that is parallel (translation) to each language (hence, both files must have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) as well.
 
 ```
 vec_path=output_pca_folder_path/vec.txt
@@ -81,4 +79,3 @@ model="Alibaba-NLP/gte-multilingual-base"
 parallel_sents="en.txt de.txt"
 CUDA_VISIBLE_DEVICES=0 python train_xling.py -parallel_sents ${parallel_sents} -lang ${lang} -epoch 15 -bs 128 -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
 ```
-
