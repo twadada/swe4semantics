@@ -5,12 +5,12 @@ English and cross-lingual (English-{German/Japanese/Chinese}) SWEs (static word 
 
 All SWEs, except for the English-Japanese one ("swe_mgte256_enja.txt"), are released under the Apache license 2.0. The English-Japanese one follows [the license of JParaCrawl](https://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/).
 
-## Train English SWEs
+# Train English SWEs
 First, prepare the **"word2sent.pkl"** file that pickles the python dictionary where keys are a list of words in a pre-defined vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we use text from [CC-100](https://data.statmt.org/cc-100/) and split them into sentences using [BlingFire](https://github.com/microsoft/BlingFire), and then sample N=100 sentences for each word in 150k Vocab.
 
 **Code is hard-coded for the BERT-style tokenisation that specifies the subword boundary with "##". Modify relevant parts if necessary.**
 
-## Extract English SWEs from GTE-base
+## 1. Extract English SWEs from GTE-base
 ```
 model=Alibaba-NLP/gte-base-en-v1.5
 word2sent=path_to_word2sent.pkl
@@ -19,7 +19,7 @@ nsent=100 # the number of example sententences to use
 CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -model ${model} -word2sent ${word2sent}  -nsent ${nsent}&&
 ```
 
-## Apply Sentence-level PCA
+## 2. Apply Sentence-level PCA
 ```
 vec_path=output_folder_path/vec.txt
 word2sent=path_to_word2sent.pkl
@@ -28,7 +28,7 @@ model="Alibaba-NLP/gte-base-en-v1.5"
 python apply_pca.py -word2sent ${word2sent} -vec_path ${vec_path} -model ${model} -output_folder ${output_folder}
 ```
 
-## Fine-tune SWEs using knowledge distillation
+## 3. Fine-tune SWEs using knowledge distillation
 ```
 model="Alibaba-NLP/gte-base-en-v1.5"
 word2sent=path_to_word2sent.pkl
@@ -37,13 +37,13 @@ output_folder=final_output_folder_path
 CUDA_VISIBLE_DEVICES=0 python train.py -prompt "" -edim 256 -d_remove 7 -word2sent ${word2sent} -epoch 15 -bs 128  -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
 ```
 
-## Train Cross-lingual SWEs
+# Train Cross-lingual SWEs
 As in obtaining monolingual SWEs above, prepare the "word2sent.pkl" file that pickles the python dictionary where keys are a list of words in a pre-defined vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we use  [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) and sample N=100 sentences for each word.
 
 
 **Code is hard-coded for language pairs used in our paper (en-de, en-zh, en-ja); modify relevant parts if necessary.**
 
-## Extract English-German SWEs from mGTE-base
+## 1. Extract English-German SWEs from mGTE-base
 ```
 model=Alibaba-NLP/gte-multilingual-base
 word2sent_en=path_to_english_word2sent
@@ -57,7 +57,7 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 
 (If the input language is Japanese/Chinese, use enable the "-subword" option)
 
-## Merge embeddings and apply Sentence-level PCA
+## 2. Merge embeddings and apply Sentence-level PCA
 
 ```
 lang1=en
@@ -70,7 +70,7 @@ python multilingual_pca.py -d_remove 7 -embd 256 -lang1 ${lang1} -lang2 ${lang2}
 ```
 (If the input language is Japanese/Chinese, use enable the "-subword" option)
 
-## Fine-tune SWEs with contrastive learning
+## 3. Fine-tune SWEs with contrastive learning
 Prepare the **"en.txt" and "de.txt"**, where each line is a sentence and translation to each other (hence, both files should have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) again.
 
 ```
