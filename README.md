@@ -25,7 +25,7 @@ model="Alibaba-NLP/gte-base-en-v1.5"
 word2sent=path_to_word2sent.pkl
 vec_path=output_folder_path/vec.txt
 output_folder=output_pca_folder_path
-python apply_pca.py -word2sent ${word2sent} -vec_path ${vec_path} -model ${model} -output_folder ${output_folder}
+python apply_pca.py -d_remove 7 -embd 256 -word2sent ${word2sent} -vec_path ${vec_path} -model ${model} -output_folder ${output_folder} 
 ```
 
 ## 3. Fine-tune SWEs using knowledge distillation
