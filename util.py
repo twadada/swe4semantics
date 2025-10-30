@@ -61,7 +61,7 @@ def encode_text_xling(lang, text, word_tokenizer, model_tokenizer, punct_list, w
     assert lang in set(["en","de","ja","zh"])
     eps =  0.00000001
     if lang =='ja' or lang == "zh": #We do not use word_tokenizer for ja/zh because these languages do not have explicit word boundary, and mGTE does not pre-tokenise text into words.
-        tokens = [x.replace("▁", "")  for x in model_tokenizer(text) if x != "▁"]
+        tokens = [x.replace("▁", "")  for x in model_tokenizer.tokenize(text) if x != "▁"]
     else: #word tokenisation
         tokens = [x[0] for x in word_tokenizer(text)]
     sent_emb = []
