@@ -235,7 +235,7 @@ def main():
     sentence1 = stsb_train['sentence1']
     sentence2 = stsb_train['sentence2']
     gold_score = stsb_train['score']
-
+    pearson_score_best = -100
     if args.sts_eval:
         # Initial evaluation
         model.eval()
@@ -243,10 +243,11 @@ def main():
             pearson_score = evaluate_sts(model, sentence1, sentence2, gold_score)
 
         print(f"Initial Pearson score: {pearson_score:.4f}")
+        pearson_score_best = pearson_score
     
     # Training loop
     best_dev_loss = float('inf')
-    pearson_score_best = pearson_score
+
     best_step = 0
     best_model = None
     early_stop_count = 5
@@ -295,13 +296,13 @@ def main():
                 if args.sts_eval:
                     pearson_score = evaluate_sts(model, sentence1, sentence2, gold_score)
                     print(f"Pearson score: {pearson_score:.4f} (best: {pearson_score_best:.4f})")
+                    # Update best score just for the purpose of monitoring model performance
+                    if pearson_score > pearson_score_best:
+                        pearson_score_best = pearson_score
 
             print(f"Dev loss: {dev_loss_total:.4f}")
 
 
-            # Update best score just for the purpose of monitoring model performance
-            if pearson_score > pearson_score_best:
-                pearson_score_best = pearson_score
 
             # Save best model based on validation loss
             if dev_loss_total < best_dev_loss:
