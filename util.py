@@ -48,7 +48,7 @@ def encode_text(text, word_tokenizer, model_tokenizer, punct_list, word2vec, edi
                             sent_emb.append(word_vec)
                             break
     if len(sent_emb) > 0:
-        sent_emb = np.sum(sent_emb, axis=0)  # n, edim
+        sent_emb = np.mean(sent_emb, axis=0)  # n, edim
         if normalise:
             sent_emb = sent_emb / (np.linalg.norm(sent_emb) + eps)
     else:
@@ -85,7 +85,7 @@ def encode_text_xling(lang, text, word_tokenizer, model_tokenizer, punct_list, w
                             sent_emb.append(word_vec)
                             break
     if len(sent_emb) > 0:
-        sent_emb = np.sum(sent_emb, axis=0)  # n, edim
+        sent_emb = np.mean(sent_emb, axis=0)  # n, edim
         if normalise:
             sent_emb = sent_emb / (np.linalg.norm(sent_emb) + eps)
     else:
