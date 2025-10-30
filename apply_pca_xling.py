@@ -8,34 +8,7 @@ from lingua import Language, LanguageDetectorBuilder
 from sklearn.decomposition import PCA
 from tqdm import tqdm
 from transformers import AutoTokenizer
-
-
-def load_w2v(file):
-    """Load word2vec format file into dictionary."""
-    word2vec = {}
-    with open(file, 'r', errors='ignore') as f:
-        dim = None
-        for line in f:
-            line = line.rstrip('\n').rstrip().rstrip(' ').split(' ')
-            if len(line) == 2:
-                print("Skipping header line")
-                continue
-            
-            w = line[0]
-            vec = line[1:]
-            
-            if dim is None:
-                dim = len(vec)
-            else:
-                if len(vec) == 0:
-                    print("Skipping zero vector")
-                    continue
-                assert len(vec) == dim, f"{len(vec)}::{dim} {w}"
-            
-            word2vec[w] = np.array([float(x) for x in vec])
-    
-    return word2vec, dim
-
+from util import  load_w2v
 
 def encode_bilingual(tokenizer, punct_list, word2vec, sents, model_tokenizer):
     """Encode sentences using bilingual word embeddings."""

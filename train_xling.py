@@ -4,38 +4,14 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 from transformers import AutoTokenizer
-import scipy.stats
 import copy
 from tqdm import tqdm
 import argparse
-import pickle
 import string
-from datasets import load_dataset
-from scipy import stats
+from util import  load_w2v
 
 # Punctuation list for filtering
 PUNCTLIST = set(list(string.punctuation) + ["¡"] + ["○"] + ["¦"] + ["–"] + ["—"] + ["”"] + ["…"] + ['’'] + ['“']+["。"]+["、"]+["？"]+["！"]+["「"]+["」"]+["（"]+["）"]+["："]+["・"]+["，"])
-
-def load_w2v(file):
-    word2vec = {}
-    with open(file, 'r', errors='ignore') as f:
-        dim = None
-        for line in f:
-            line = line.rstrip('\n').rstrip(' ').split(' ')
-            if len(line) == 2:
-                print("skip the first line")
-                continue
-            w = line[0]
-            vec = line[1:]
-            if dim is None:
-                dim = len(vec)
-            else:
-                if len(vec) == 0:
-                    print("skip the zero vector")
-                    continue
-                assert len(vec) == dim
-            word2vec[w] = np.array([float(x) for x in vec])
-    return word2vec, dim
 
 class Net(nn.Module):
     def __init__(self, word2vec, model_path):

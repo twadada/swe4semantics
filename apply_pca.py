@@ -7,50 +7,10 @@ import string
 from tqdm import tqdm
 from transformers import AutoTokenizer
 from sklearn.decomposition import PCA
+from util import load_w2v
 
 # Punctuation marks to filter out during tokenization
 PUNCTLIST = list(string.punctuation) + ["¡"] + ["○"] + ["¦"] + ["–"] + ["—"] + ["”"] + ["…"] + ['’'] + ['“']
-
-
-def load_w2v(file):
-    """
-    Load word2vec format embeddings from file.
-    
-    Args:
-        file: Path to word2vec text file
-    
-    Returns:
-        word2vec: Dictionary mapping words to numpy arrays
-        dim: Embedding dimension
-    """
-    word2vec = {}
-    
-    with open(file, 'r', errors='ignore') as f:
-        dim = None
-        for line in f:
-            line = line.rstrip('\n').rstrip().rstrip(' ').split(' ')
-            
-            # Skip header line with format: vocab_size embedding_dim
-            if len(line) == 2:
-                print("Skipping header line")
-                continue
-            
-            w = line[0]
-            vec = line[1:]
-            
-            # Initialize dimension from first valid line
-            if dim is None:
-                dim = len(vec)
-            else:
-                if len(vec) == 0:
-                    print("Skipping zero vector")
-                    continue
-                assert len(vec) == dim, f"{len(vec)}::{dim} {w}"
-            
-            word2vec[w] = np.array([float(x) for x in vec])
-    
-    return word2vec, dim
-
 
 def encode_sentences(tokenizer, word2vec, sents, model_tokenizer):
     """
