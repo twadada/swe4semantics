@@ -10,6 +10,7 @@ word_tokenizer = bert_tokenizer.backend_tokenizer.pre_tokenizer.pre_tokenize_str
 model_tokenizer = AutoTokenizer.from_pretrained(st_model_path)
 word2vec, edim = load_w2v(vec_path)
 
+
 text1 = "We proposed word embeddings for sentence semantic representation."
 text2 = "Our word embeddings represent the meaning of sentences effectively"
 

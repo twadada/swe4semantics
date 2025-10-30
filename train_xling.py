@@ -139,7 +139,7 @@ def parse_args():
     parser.add_argument('-epoch', default=1, type=int)
     parser.add_argument('-temp', default=0.05, type=float)
     parser.add_argument('-parallel_sents', default="", nargs='+')
-    parser.add_argument('-lang', choices=['ende', 'enja', 'enzh'], default="")
+    parser.add_argument('-lang', choices=['ende', 'enja', 'enzh'])
     return parser.parse_args()
 
 def main():
