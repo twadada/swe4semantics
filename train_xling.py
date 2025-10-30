@@ -139,7 +139,7 @@ def parse_args():
     parser.add_argument('-epoch', default=1, type=int)
     parser.add_argument('-temp', default=0.05, type=float)
     parser.add_argument('-parallel_sents', default="", nargs='+')
-    parser.add_argument('-lang', default="")
+    parser.add_argument('-lang', choices=['ende', 'enja', 'enzh'], default="")
     return parser.parse_args()
 
 def main():
@@ -161,7 +161,7 @@ def main():
         languages = [Language.ENGLISH, Language.GERMAN]
         detector = LanguageDetectorBuilder.from_languages(*languages).build()
     else:
-        raise ValueError("Language pair must be specified")
+        raise ValueError("Accept enja/enzh/ende only")
 
     print(f"Language detector: {detector}")
 
@@ -176,10 +176,15 @@ def main():
     # Load MT data
     assert len(args.parallel_sents) == 2
 
-    with open(args.parallel_sents[0], 'rb') as f:
-        l1_lines = pickle.load(f)
-    with open(args.parallel_sents[1], 'rb') as f:
-        l2_lines = pickle.load(f)
+    l1_lines = []
+    for line in open(args.parallel_sents[0]):
+        line = line.strip('\n')
+        l1_lines.append(line)
+
+    l2_lines = []
+    for line in open(args.parallel_sents[1]):
+        line = line.strip('\n')
+        l2_lines.append(line)
 
     l1_lines_train = l1_lines[:-10000]
     l1_lines_dev = l1_lines[-10000:]
@@ -192,31 +197,8 @@ def main():
     print(f"Train: {len(l1_lines_train)} parallel sentences")
     print(f"Dev: {len(l1_lines_dev)} parallel sentences")
 
-    # Load STS-B for evaluation
-    stsb_pair_score_train = load_dataset("sentence-transformers/stsb", split="train")
-    sentence1 = stsb_pair_score_train['sentence1']
-    sentence2 = stsb_pair_score_train['sentence2']
-    score = stsb_pair_score_train['score']
-
-    # Initial STS-B evaluation
-    model.eval()
-    with torch.no_grad():
-        cossim_list = []
-        for j in tqdm(range(0, len(sentence1), 256), desc="Initial eval"):
-            sent1_tmp = sentence1[j:j + 256]
-            sent2_tmp = sentence2[j:j + 256]
-            static_embeddings1 = model(sent1_tmp, detector)
-            static_embeddings2 = model(sent2_tmp, detector)
-            static_embeddings1 = F.normalize(static_embeddings1, dim=-1)
-            static_embeddings2 = F.normalize(static_embeddings2, dim=-1)
-            cossim = torch.sum(static_embeddings1 * static_embeddings2, dim=-1).data.cpu().tolist()
-            cossim_list.extend(cossim)
-        pearson_score_init = stats.pearsonr(cossim_list, score)[0]
-
-    print(f"Initial Pearson score: {pearson_score_init:.4f}")
 
     best_dev_loss = float('inf')
-    pearson_score_best = -100
     early_stop_count = 5
     no_improvement = 0
     best_epoch = 0
@@ -304,25 +286,7 @@ def main():
                     loss += contrastive_loss(cossim_static.T / args.temp, goldlabel.T)
                     dev_loss_total += loss
 
-            # STS-B evaluation (optional)
-            with torch.no_grad():
-                cossim_list = []
-                for j in tqdm(range(0, len(sentence1), 256), desc="STS-B eval"):
-                    sent1_tmp = sentence1[j:j + 256]
-                    sent2_tmp = sentence2[j:j + 256]
-                    static_embeddings1 = model(sent1_tmp, detector)
-                    static_embeddings2 = model(sent2_tmp, detector)
-                    static_embeddings1 = F.normalize(static_embeddings1, dim=-1)
-                    static_embeddings2 = F.normalize(static_embeddings2, dim=-1)
-                    cossim = torch.sum(static_embeddings1 * static_embeddings2, dim=-1).data.cpu().tolist()
-                    cossim_list.extend(cossim)
-                pearson_score = stats.pearsonr(cossim_list, score)[0]
-
             print(f"  Dev loss: {dev_loss_total:.4f}")
-            print(f"  Pearson score: {pearson_score:.4f} (best: {pearson_score_best:.4f})")
-
-            if pearson_score > pearson_score_best:
-                pearson_score_best = pearson_score
 
             if best_dev_loss > dev_loss_total:
                 best_dev_loss = dev_loss_total

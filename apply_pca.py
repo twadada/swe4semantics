@@ -135,7 +135,7 @@ def parse_args():
                        help='Hugging Face model for subword tokenization')
     parser.add_argument('-vec_path', required=True,
                        help='Path to input word vectors')
-    parser.add_argument('-pca_folder', required=True,
+    parser.add_argument('-output_folder', required=True,
                        help='Output folder for PCA components')
     parser.add_argument('-word2sent', required=True,
                        help='Pickle file mapping words to example sentences')
@@ -151,7 +151,7 @@ def main():
     args = parse_args()
     
     # Create output folder
-    os.makedirs(args.pca_folder, exist_ok=True)
+    os.makedirs(args.output_folder, exist_ok=True)
     
     # ============================================================================
     # 1. Load Word Embeddings
@@ -210,13 +210,13 @@ def main():
     # 4. Save PCA Components
     # ============================================================================
     
-    print(f"\nSaving PCA components to {args.pca_folder}")
+    print(f"\nSaving PCA components to {args.output_folder}")
     
     # Save mean vector for centering
-    np.save(f"{args.pca_folder}/all_pca_mean.npy", pca.mean_)
+    np.save(f"{args.output_folder}/all_pca_mean.npy", pca.mean_)
     
     # Save principal components
-    np.save(f"{args.pca_folder}/all_pca_components.npy", pca.components_)
+    np.save(f"{args.output_folder}/all_pca_components.npy", pca.components_)
     
     # ============================================================================
     # 5. Report Variance Explained
@@ -257,7 +257,7 @@ def main():
     print(f"Transformed embeddings shape: {new_emb.shape}")
 
     # Save in word2vec text format
-    output_file = f"{args.pca_folder}/vec.txt"
+    output_file = f"{args.output_folder}/vec.txt"
     print(f"Saving transformed vectors to {output_file}")
 
     with open(output_file, "w") as f:

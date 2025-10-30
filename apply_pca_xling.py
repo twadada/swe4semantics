@@ -173,7 +173,7 @@ def main():
     parser.add_argument('-lang2', required=True, help='Second language code')
     parser.add_argument('-word2sent1', required=True, help='Path to word2sent pickle for lang1')
     parser.add_argument('-word2sent2', required=True, help='Path to word2sent pickle for lang2')
-    parser.add_argument('-pca_folder', required=True, help='Output folder for PCA files')
+    parser.add_argument('-output_folder', required=True, help='Output folder for PCA files')
     parser.add_argument('-embd', required=True, type=int,help='Output folder for PCA files')
     parser.add_argument('-d_remove', required=True, type=int,help='Output folder for PCA files')
 
@@ -183,7 +183,7 @@ def main():
     assert args.lang1 == "en", "lang1 must be 'en'"
     
     # Create output directory
-    os.makedirs(args.pca_folder, exist_ok=True)
+    os.makedirs(args.output_folder, exist_ok=True)
     
     # Load word vectors
     print("Loading word vectors...")
@@ -233,8 +233,8 @@ def main():
     pca.fit(sent_embs)
     
     # Save PCA parameters
-    np.save(os.path.join(args.pca_folder, "all_pca_mean.npy"), pca.mean_)
-    np.save(os.path.join(args.pca_folder, "all_pca_components.npy"), pca.components_)
+    np.save(os.path.join(args.output_folder, "all_pca_mean.npy"), pca.mean_)
+    np.save(os.path.join(args.output_folder, "all_pca_components.npy"), pca.components_)
     
     # Print variance statistics
     print(f"\nPCA variance explained:")
@@ -251,7 +251,7 @@ def main():
     
     # Save transformed word vectors
     print("\nSaving transformed word vectors...")
-    output_vec_path = os.path.join(args.pca_folder, "vec.txt")
+    output_vec_path = os.path.join(args.output_folder, "vec.txt")
     new_emb = save_word_vectors(word2vec, pca, output_vec_path, args.d_remove, args.embd)
     print(f"Word vectors saved to: {output_vec_path}")
     embd = new_emb.shape[1]
