@@ -81,4 +81,4 @@ parallel_sents="en.txt de.txt"
 CUDA_VISIBLE_DEVICES=0 python train_xling.py -parallel_sents ${parallel_sents} -lang ${lang} -epoch 15 -bs 128 -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
 ```
 
-**Note: The code used in step 2 and 3 are designed for training bilingual SWEs (as done in our paper), but can be easily extended to mulitlingual training. For step 2, merge word embeddings of multiple languages and apply PCA, which we did to produce the results shown in Table 10 and 11. For step 3, feed paralell sentences of multiple language pairs and jointly minimise the contrastive learning loss**
+**Note: The code used in step 2 and 3 are designed for training bilingual SWEs (as done in our paper), but can be easily extended to mulitlingual training. For step 2, merge word embeddings of multiple languages and apply PCA, which we did to produce the results shown in Table 10 and 11. For step 3, feed paralell sentences of multiple language pairs and jointly minimise the contrastive learning loss.**
