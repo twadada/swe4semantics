@@ -15,9 +15,9 @@ First, prepare the **"word2sent.pkl"** file that pickles the python dictionary w
 ```
 model=Alibaba-NLP/gte-base-en-v1.5
 word2sent=path_to_word2sent.pkl
-folder=output_folder_path
+output_folder=output_folder_path
 nsent=100 # the number of example sententences to use
-CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -model ${model} -word2sent ${word2sent}  -nsent ${nsent}&&
+CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -output_folder ${output_folder} -model ${model} -word2sent ${word2sent}  -nsent ${nsent}
 ```
 
 ## 2. Apply Sentence-level PCA
