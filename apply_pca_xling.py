@@ -104,24 +104,32 @@ def collect_sentences(word2sent_path, target_lang, detector, max_sents=100000):
     return lines
 
 
-def merge_word_vectors(word2vec1, word2vec2):
-    """Merge two word vector dictionaries by averaging shared words."""
-    vocab = set(word2vec1.keys())
-    vocab.update(word2vec2.keys())
+
+def merge_word_vectors(word2vec_list):
+    """Merge multiple word vector dictionaries by averaging only existing vectors."""
+    # Collect all unique words across all dictionaries
+    vocab = set()
+    for w2v in word2vec_list:
+        vocab.update(w2v.keys())
+
     vocab = list(vocab)
-    print(f"Total vocab: {len(vocab)}")
-    
+    print(f"vocab {len(vocab)}")
+
     word2vec = {}
     for w in vocab:
-        if w in word2vec1 and w in word2vec2: #Exist in both langs
-            word2vec[w] = (word2vec1[w] + word2vec2[w]) / 2
-        elif w in word2vec1: #Exist only in lang1
-            word2vec[w] = word2vec1[w]
-        else: #Exist only in lang2
-            word2vec[w] = word2vec2[w]
-    
-    return word2vec
+        # Collect vectors that exist for this word
+        vectors = []
+        for w2v in word2vec_list:
+            if w in w2v:
+                vectors.append(w2v[w])
 
+        # Average the collected vectors
+        if vectors:
+            word2vec[w] = sum(vectors) / len(vectors)
+        else:
+            raise Exception
+
+    return word2vec
 
 def save_word_vectors(word2vec, pca, output_path, d_remove, embd):
     """Apply PCA transformation and save word vectors."""
@@ -140,12 +148,9 @@ def save_word_vectors(word2vec, pca, output_path, d_remove, embd):
 def main():
     parser = argparse.ArgumentParser(description="Create bilingual word embeddings with PCA")
     parser.add_argument('-model', required=True, help='Tokenizer model name')
-    parser.add_argument('-vec_path1', required=True, help='Path to first word2vec file')
-    parser.add_argument('-vec_path2', required=True, help='Path to second word2vec file')
-    parser.add_argument('-lang1', required=True, help='First language code (should be "en")')
-    parser.add_argument('-lang2', required=True, help='Second language code')
-    parser.add_argument('-word2sent1', required=True, help='Path to word2sent pickle for lang1')
-    parser.add_argument('-word2sent2', required=True, help='Path to word2sent pickle for lang2')
+    parser.add_argument('-vec_path', required=True,  nargs='+',help='List of Path to first word2vec file')
+    parser.add_argument('-langs', required=True,   nargs='+',help='First language code (should be "en")')
+    parser.add_argument('-word2sent', required=True,   nargs='+',help='Path to word2sent pickle for lang1')
     parser.add_argument('-output_folder', required=True, help='Output folder for PCA files')
     parser.add_argument('-embd', required=True, type=int,help='the number of components to remove (ABTT)')
     parser.add_argument('-d_remove', required=True, type=int,help='Embedding dimension')
@@ -153,18 +158,23 @@ def main():
     args = parser.parse_args()
     
     # Validate inputs
-    assert args.lang1 == "en", "lang1 must be 'en'"
+    assert args.langs[0] == "en", "langs must start with 'en'"
     
     # Create output directory
     os.makedirs(args.output_folder, exist_ok=True)
     
     # Load word vectors
+    assert len(args.vec_path) >= 2, "Input word vectors of multiple languages"
+    assert len(args.langs) == len(args.vec_path)==len(args.word2sent), "Input the same number of files for -vec_path, -word2sent, and -langs"
+
     print("Loading word vectors...")
-    word2vec1, edim = load_w2v(args.vec_path1)
-    word2vec2, _ = load_w2v(args.vec_path2)
-    print(f"word2vec1: {len(word2vec1)} words")
-    print(f"word2vec2: {len(word2vec2)} words")
-    
+    word2vec_list = []
+    for i in range(len(args.vec_path)):
+        word2vec, edim = load_w2v(args.vec_path[i])
+        word2vec_list.append(word2vec)
+        print(f"word2vec{i}: {len(word2vec)} words")
+        print(f"edim: {len(edim)}")
+
     # Setup language detector
     global detector
     language_map = {
@@ -172,12 +182,11 @@ def main():
         'zh': Language.CHINESE,
         'ja': Language.JAPANESE
     }
-    assert args.lang1 == "en"
-    languages = [Language.ENGLISH, language_map[args.lang2]]
+    languages = [Language.ENGLISH] + [language_map[l] for l in args.langs]
     detector = LanguageDetectorBuilder.from_languages(*languages).build()
     
     # Merge or keep separate vocabularies
-    word2vec = merge_word_vectors(word2vec1, word2vec2)
+    word2vec = merge_word_vectors(word2vec_list)
     # Load tokenizers
     print("Loading tokenizers...")
     model_tokenizer = AutoTokenizer.from_pretrained(args.model)
@@ -190,8 +199,9 @@ def main():
 
     # Collect sentences
     print("Collecting sentences...")
-    lines = collect_sentences(args.word2sent1, args.lang1, detector, max_sents=100000)
-    lines += collect_sentences(args.word2sent2, args.lang2, detector, max_sents=100000)
+    lines = []
+    for i in range(len(args.word2sent)):
+        lines += collect_sentences(args.word2sent[i], args.langs[i], detector, max_sents=100000)
     print(f"Total sentences collected: {len(lines)}")
     
     # Encode sentences
