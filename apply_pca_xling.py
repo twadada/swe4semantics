@@ -182,7 +182,7 @@ def main():
         'zh': Language.CHINESE,
         'ja': Language.JAPANESE
     }
-    languages = [Language.ENGLISH] + [language_map[l] for l in args.langs]
+    languages = [Language.ENGLISH] + [language_map[l] for l in args.langs[1:]]
     detector = LanguageDetectorBuilder.from_languages(*languages).build()
     
     # Merge or keep separate vocabularies
