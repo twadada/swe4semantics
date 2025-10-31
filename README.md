@@ -81,7 +81,7 @@ python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${wor
 ```
 
 ## 3. Fine-tune SWEs with contrastive learning
-Prepare the **"en.txt" and "de.txt"**, where each line is a sentence that is parallel (translation) to each language (hence, both files must have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) as well.
+Prepare **"en.txt" and "de.txt"**, where each line is a sentence that is parallel (translation) to each language (hence, both files must have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) as well.
 
 ```
 vec_path=output_pca_folder_path/vec.txt
