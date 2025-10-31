@@ -60,7 +60,7 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 
 ## 2. Merge embeddings and apply Sentence-level PCA
 
-For bilingual SWEs
+**Generate English-German SWEs**
 ```
 langs="en de"
 vec_path="output_english_folder_path/vec.txt output_german_folder_path/vec.txt"
@@ -70,7 +70,7 @@ output_folder=output_pca_folder_path
 python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${word2sent}  -vec_path ${vec_path} -model ${model}  -output_folder ${output_folder}
 ```
 
-For multilingual SWEs (e.g. SWEs aligned across English, German, Chinese, and Japanese, evaluated in Table 10 and 11 in the paper.)
+**You can also generate multilingual SWEs** (e.g. SWEs aligned across English, German, Chinese, and Japanese, which are evaluated in Table 10 and 11 in the paper.)
 ```
 langs="en de zh ja"
 vec_path="output_english_folder_path/vec.txt output_german_folder_path/vec.txt output_chinese_folder_path/vec.txt output_japanese_folder_path/vec.txt"
@@ -92,4 +92,4 @@ parallel_sents="en.txt de.txt"
 CUDA_VISIBLE_DEVICES=0 python train_xling.py -parallel_sents ${parallel_sents} -lang ${lang} -epoch 15 -bs 128 -model ${model} -vec_path ${vec_path} -output_folder ${output_folder}
 ```
 
-**Note: The code used in step 3 are designed for training bilingual SWEs (as described in our paper), but can be easily extended to mulitlingual training by feeding paralell sentences of multiple language pairs and jointly minimise the contrastive learning loss.**
+**Note: The code used in step 3 is designed for training bilingual SWEs (as described in our paper), but can be easily extended to mulitlingual training by feeding paralell sentences of multiple language pairs and jointly minimising the contrastive learning loss.**
