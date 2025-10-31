@@ -173,7 +173,7 @@ def main():
         word2vec, edim = load_w2v(args.vec_path[i])
         word2vec_list.append(word2vec)
         print(f"word2vec{i}: {len(word2vec)} words")
-        print(f"edim: {len(edim)}")
+        print(f"edim: {edim}")
 
     # Setup language detector
     global detector
