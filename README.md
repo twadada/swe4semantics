@@ -2,7 +2,7 @@
 This repositiory provides code and static word embeddings (SWEs) proposed in our paper "[Static Word Embeddings for Sentence Semantic Representation](https://arxiv.org/abs/2506.04624)" (EMNLP 25 Main).
 
 
-# How to use SWEs for encoding sentences
+# How to Use SWEs for Encoding Sentences
 English and cross-lingual (English-{German/Japanese/Chinese}) SWEs are stored in the "embeddings" folder.  **Code and SWE models, except for the English-Japanese one ("swe_mgte256_enja.txt"), are released under the Apache license 2.0. The English-Japanese one follows the license [JParaCrawl](https://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/) (placed at "embeddings/license_swe_mgte256_enja.txt").**
 
 Refer to "example.py" for how to use English SWEs, and "example_xling.py" for cross-lignual ones.
@@ -30,7 +30,7 @@ output_folder=output_pca_folder_path
 python apply_pca.py -d_remove 7 -embd 256 -word2sent ${word2sent} -vec_path ${vec_path} -model ${model} -output_folder ${output_folder} 
 ```
 
-## 3. Fine-tune SWEs using knowledge distillation
+## 3. Fine-tune SWEs with Knowledge Distillation
 ```
 model="Alibaba-NLP/gte-base-en-v1.5"
 word2sent=path_to_word2sent.pkl
@@ -58,7 +58,7 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 
 (If the input language is Japanese/Chinese, enable the "-subword" option)
 
-## 2. Merge SWEs and apply Sentence-level PCA
+## 2. Merge SWEs and Apply Sentence-level PCA
 
 **Generate English-German SWEs**
 ```
@@ -80,7 +80,7 @@ output_folder=output_pca_folder_path
 python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${word2sent}  -vec_path ${vec_path} -model ${model}  -output_folder ${output_folder}
 ```
 
-## 3. Fine-tune SWEs with contrastive learning
+## 3. Fine-tune SWEs with Contrastive Learning
 Prepare **"en.txt" and "de.txt"**, where each line is a sentence that is parallel (translation) to each language (hence, both files must have the same numbner of lines). These files are used for contrastive learning. In our paper, we use [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) as in Step 1.
 
 ```
