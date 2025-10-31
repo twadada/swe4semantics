@@ -17,7 +17,7 @@ First, prepare the **"word2sent.pkl"** file that pickles the python dictionary w
 model=Alibaba-NLP/gte-base-en-v1.5
 word2sent=path_to_word2sent.pkl
 output_folder=output_folder_path
-nsent=100 # the number of example sententences to use
+nsent=100
 CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -output_folder ${output_folder} -model ${model} -word2sent ${word2sent}  -nsent ${nsent}
 ```
 
@@ -67,7 +67,7 @@ vec_path_en=output_english_folder_path/vec.txt
 vec_path_de=output_german_folder_path/vec.txt
 model="Alibaba-NLP/gte-multilingual-base"
 output_folder=output_pca_folder_path
-python multilingual_pca.py -d_remove 7 -embd 256 -lang1 ${lang1} -lang2 ${lang2} -word2sent1 ${word2sent_en} -word2sent2 ${word2sent_de}  -vec_path1 ${vec_path_en} -vec_path2 ${vec_path_de}  -model ${model}  -output_folder ${output_folder}
+python apply_pca_xling.py -d_remove 7 -embd 256 -lang1 ${lang1} -lang2 ${lang2} -word2sent1 ${word2sent_en} -word2sent2 ${word2sent_de}  -vec_path1 ${vec_path_en} -vec_path2 ${vec_path_de}  -model ${model}  -output_folder ${output_folder}
 ```
 
 ## 3. Fine-tune SWEs with contrastive learning
