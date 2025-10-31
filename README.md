@@ -60,11 +60,22 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 
 ## 2. Merge embeddings and apply Sentence-level PCA
 
+For bilingual SWEs
 ```
 langs="en de"
 vec_path="output_english_folder_path/vec.txt output_german_folder_path/vec.txt"
 model="Alibaba-NLP/gte-multilingual-base"
 word2sent="${word2sent_en} ${word2sent_de}"
+output_folder=output_pca_folder_path
+python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${word2sent}  -vec_path ${vec_path} -model ${model}  -output_folder ${output_folder}
+```
+
+For multilingual SWEs (e.g. aligned across English, German, Chinese, Japanese)
+```
+langs="en de zh ja"
+vec_path="output_english_folder_path/vec.txt output_german_folder_path/vec.txt output_chinese_folder_path/vec.txt output_japanese_folder_path/vec.txt"
+model="Alibaba-NLP/gte-multilingual-base"
+word2sent="${word2sent_en} ${word2sent_de} ${word2sent_zh} ${word2sent_ja}"
 output_folder=output_pca_folder_path
 python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${word2sent}  -vec_path ${vec_path} -model ${model}  -output_folder ${output_folder}
 ```
