@@ -61,13 +61,12 @@ CUDA_VISIBLE_DEVICES=0 python extract_embs.py  -prompt "" -folder ${folder} -mod
 ## 2. Merge embeddings and apply Sentence-level PCA
 
 ```
-lang1=en
-lang2=de
-vec_path_en=output_english_folder_path/vec.txt
-vec_path_de=output_german_folder_path/vec.txt
+langs="en de"
+vec_path="output_english_folder_path/vec.txt output_german_folder_path/vec.txt"
 model="Alibaba-NLP/gte-multilingual-base"
+word2sent="${word2sent_en} ${word2sent_de}"
 output_folder=output_pca_folder_path
-python apply_pca_xling.py -d_remove 7 -embd 256 -lang1 ${lang1} -lang2 ${lang2} -word2sent1 ${word2sent_en} -word2sent2 ${word2sent_de}  -vec_path1 ${vec_path_en} -vec_path2 ${vec_path_de}  -model ${model}  -output_folder ${output_folder}
+python apply_pca_xling.py -d_remove 7 -embd 256 -langs ${langs} -word2sent ${word2sent}  -vec_path ${vec_path} -model ${model}  -output_folder ${output_folder}
 ```
 
 ## 3. Fine-tune SWEs with contrastive learning
