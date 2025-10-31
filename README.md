@@ -3,7 +3,7 @@ This repositiory provides code and models proposed in our paper "[Static Word Em
 
 
 # How to use SWEs for encoding sentences
-English and cross-lingual (English-{German/Japanese/Chinese}) SWEs (static word embeddings) are both stored in the "embeddings" folder.  **All SWEs, except for the English-Japanese one ("swe_mgte256_enja.txt"), are released under the Apache license 2.0. The English-Japanese one follows the license [JParaCrawl](https://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/) (placed at "embeddings/license_swe_mgte256_enja.txt").**
+English and cross-lingual (English-{German/Japanese/Chinese}) SWEs (static word embeddings) are both stored in the "embeddings" folder.  **Code and All SWE models, except for the English-Japanese one ("swe_mgte256_enja.txt"), are released under the Apache license 2.0. The English-Japanese one follows the license [JParaCrawl](https://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/) (placed at "embeddings/license_swe_mgte256_enja.txt").**
 
 Refer to "example.py" for how to use English SWEs, and "example_xling.py" for cross-lignual ones.
 
