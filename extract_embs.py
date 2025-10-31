@@ -147,7 +147,7 @@ def parse_args():
     )
     parser.add_argument('-model', required=True,
                        help='Hugging Face model name or path')
-    parser.add_argument('-folder', required=True,
+    parser.add_argument('-output_folder', required=True,
                        help='Output folder for embeddings')
     parser.add_argument('-word2sent', required=True,
                        help='Pickle file mapping words/tokens to example sentences')
@@ -171,7 +171,7 @@ def main():
     # 1. Setup Output Folder
     # ============================================================================
 
-    folder = args.folder
+    folder = args.output_folder
     os.makedirs(folder, exist_ok=True)
     print(f"Output folder: {folder}")
 
