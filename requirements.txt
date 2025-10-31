@@ -3,7 +3,6 @@ transformers
 datasets
 sentence_transformers
 tqdm
-string
 scikit-learn
 lingua
 lingua-language-detector
