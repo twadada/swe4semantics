@@ -242,7 +242,7 @@ def main():
         with torch.no_grad():
             spearmanr_score = evaluate_sts(model, sentence1, sentence2, gold_score)
 
-        print(f"Initial spearmanr score: {spearmanr_score:.4f}")
+        print(f"Initial Spearmanr score: {spearmanr_score:.4f}")
         spearmanr_score_best = spearmanr_score
     
     # Training loop
@@ -295,7 +295,7 @@ def main():
                 # Evaluate on STS-B
                 if args.sts_eval:
                     spearmanr_score = evaluate_sts(model, sentence1, sentence2, gold_score)
-                    print(f"spearmanr score: {spearmanr_score:.4f} (best: {spearmanr_score_best:.4f})")
+                    print(f"Spearmanr score: {spearmanr_score:.4f} (best: {spearmanr_score_best:.4f})")
                     # Update best score just for the purpose of monitoring model performance
                     if spearmanr_score > spearmanr_score_best:
                         spearmanr_score_best = spearmanr_score
