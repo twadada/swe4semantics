@@ -44,7 +44,7 @@ As in monolingual SWEs, prepare the "word2sent.pkl" file that pickles a python d
 
 **Some pieces of code are hard-coded for language pairs used in our paper (en-de, en-zh, en-ja); modify relevant parts if necessary.**
 
-## 1. Extract English and German SWEs separately from mGTE-base
+## 1. Extract English and German SWEs Separately from mGTE-base
 ```
 model=Alibaba-NLP/gte-multilingual-base
 word2sent_en=path_to_english_word2sent
