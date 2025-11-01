@@ -174,8 +174,8 @@ def evaluate_sts(model, sentence1, sentence2, gold_score):
         cossim = torch.sum(static_embeddings1 * static_embeddings2, dim=-1).cpu().tolist()
         cossim_list.extend(cossim)
     
-    pearson_score = stats.pearsonr(cossim_list, gold_score)[0]
-    return pearson_score
+    spearmanr_score = stats.spearmanr(cossim_list, gold_score)[0]
+    return spearmanr_score
 
 
 def main():
@@ -235,15 +235,15 @@ def main():
     sentence1 = stsb_train['sentence1']
     sentence2 = stsb_train['sentence2']
     gold_score = stsb_train['score']
-    pearson_score_best = -100
+    spearmanr_score_best = -100
     if args.sts_eval:
         # Initial evaluation
         model.eval()
         with torch.no_grad():
-            pearson_score = evaluate_sts(model, sentence1, sentence2, gold_score)
+            spearmanr_score = evaluate_sts(model, sentence1, sentence2, gold_score)
 
-        print(f"Initial Pearson score: {pearson_score:.4f}")
-        pearson_score_best = pearson_score
+        print(f"Initial spearmanr score: {spearmanr_score:.4f}")
+        spearmanr_score_best = spearmanr_score
     
     # Training loop
     best_dev_loss = float('inf')
@@ -294,11 +294,11 @@ def main():
 
                 # Evaluate on STS-B
                 if args.sts_eval:
-                    pearson_score = evaluate_sts(model, sentence1, sentence2, gold_score)
-                    print(f"Pearson score: {pearson_score:.4f} (best: {pearson_score_best:.4f})")
+                    spearmanr_score = evaluate_sts(model, sentence1, sentence2, gold_score)
+                    print(f"spearmanr score: {spearmanr_score:.4f} (best: {spearmanr_score_best:.4f})")
                     # Update best score just for the purpose of monitoring model performance
-                    if pearson_score > pearson_score_best:
-                        pearson_score_best = pearson_score
+                    if spearmanr_score > spearmanr_score_best:
+                        spearmanr_score_best = spearmanr_score
 
             print(f"Dev loss: {dev_loss_total:.4f}")
 
