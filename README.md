@@ -1,5 +1,5 @@
 # swe4semantics
-This repositiory provides code and static word embeddings (SWEs) proposed in our paper "[Static Word Embeddings for Sentence Semantic Representation](https://arxiv.org/abs/2506.04624)" (EMNLP 25 Main).
+This repositiory provides code and static word embeddings (SWEs) proposed in our paper "[Static Word Embeddings for Sentence Semantic Representation](https://aclanthology.org/2025.emnlp-main.316.pdf)" (EMNLP 25 Main).
 
 
 # How to Use SWEs for Encoding Sentences
