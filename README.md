@@ -93,3 +93,28 @@ CUDA_VISIBLE_DEVICES=0 python train_xling.py -parallel_sents ${parallel_sents} -
 ```
 
 **Note: The code used in Step 3 is designed for training bilingual SWEs (as described in our paper), but can be easily extended to mulitlingual training by feeding paralell sentences of multiple language pairs and jointly minimising the contrastive learning loss.**
+
+# Citation
+If you use our code or models, please cite our paper as follows:
+```
+@inproceedings{wada-etal-2025-static,
+    title = "Static Word Embeddings for Sentence Semantic Representation",
+    author = "Wada, Takashi  and
+      Hirakawa, Yuki  and
+      Shimizu, Ryotaro  and
+      Kawashima, Takahiro  and
+      Saito, Yuki",
+    editor = "Christodoulopoulos, Christos  and
+      Chakraborty, Tanmoy  and
+      Rose, Carolyn  and
+      Peng, Violet",
+    booktitle = "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2025",
+    address = "Suzhou, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.emnlp-main.316/",
+    pages = "6206--6222",
+    ISBN = "979-8-89176-332-6",
+}
+```
