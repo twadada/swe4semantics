@@ -10,7 +10,7 @@ Refer to "example.py" for how to use English SWEs, and "example_xling.py" for cr
 # Train English SWEs
 First, prepare the **"word2sent.pkl"** file that pickles the Python dictionary where keys are a list of words in (pre-defined) vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word (e.g. "good": ["I have good news.", "He is a good student.", "That sounds good.", ...] ). In our paper, we employ [CC-100](https://data.statmt.org/cc-100/) and split text in each line into sentences using [BlingFire](https://github.com/microsoft/BlingFire), and then sample N=100 sentences for each word in the 150k vocab.
 
-**Some pieces of code are hard-coded for the BERT-style tokenisation that specifies the subword boundary with "##". Modify relevant parts if necessary.**
+**Note that some pieces of code are hard-coded for the BERT-style tokenisation that specifies the subword boundary with "##". Modify relevant parts if necessary.**
 
 ## 1. Extract English SWEs from GTE-base
 ```
@@ -42,7 +42,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py -prompt "" -word2sent ${word2sent} -epoch
 # Train Cross-lingual SWEs
 As in monolingual SWEs, prepare the "word2sent.pkl" file that pickles a python dictionary where keys are a list of words in a pre-defined vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we use  [CCMatrix](https://opus.nlpl.eu/CCMatrix/corpus/version/CCMatrix) and sample N=100 sentences for each word.
 
-**Some pieces of code are hard-coded for language pairs used in our paper (en-de, en-zh, en-ja); modify relevant parts if necessary.**
+**Note that some pieces of code are hard-coded for language pairs used in our paper (en-de, en-zh, en-ja); modify relevant parts if necessary.**
 
 ## 1. Extract English and German SWEs Separately from mGTE-base
 ```
