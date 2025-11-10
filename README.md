@@ -8,7 +8,7 @@ English and cross-lingual (English-{German/Japanese/Chinese}) SWEs are stored in
 Refer to "example.py" for how to use English SWEs, and "example_xling.py" for cross-lignual ones. As described in the paper title, these embeddings are more effective for encoding sentences than paragraphs/documents.
 
 # Train English SWEs
-First, prepare the **"word2sent.pkl"** file that pickles the python dictionary where keys are a list of words in (pre-defined) vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word. In our paper, we employ [CC-100](https://data.statmt.org/cc-100/) and split text in each line into sentences using [BlingFire](https://github.com/microsoft/BlingFire), and then sample N=100 sentences for each word in the 150k vocab.
+First, prepare the **"word2sent.pkl"** file that pickles the Python dictionary where keys are a list of words in (pre-defined) vocabulary and values are a list of N unlabelled sentences (**not passages or documents**) that contain the key word (e.g. good: ["I have good news.", "He is a good student.", "That sounds good.", ...] ). In our paper, we employ [CC-100](https://data.statmt.org/cc-100/) and split text in each line into sentences using [BlingFire](https://github.com/microsoft/BlingFire), and then sample N=100 sentences for each word in the 150k vocab.
 
 **Some pieces of code are hard-coded for the BERT-style tokenisation that specifies the subword boundary with "##". Modify relevant parts if necessary.**
 
