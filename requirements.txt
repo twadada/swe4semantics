@@ -1,5 +1,5 @@
 torch
-transformers
+transformers<5
 datasets
 sentence_transformers
 tqdm
